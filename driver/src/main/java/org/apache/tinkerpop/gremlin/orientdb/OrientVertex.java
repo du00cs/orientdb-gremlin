@@ -61,11 +61,17 @@ public final class OrientVertex extends OrientElement implements Vertex {
             if (fieldValue == null)
                 continue;
 
-            if (fieldValue instanceof ORidBag)
-                streamVertices.add(asStream(((ORidBag) fieldValue).rawIterator())
-                        .map(oIdentifiable -> new OrientEdge(graph, oIdentifiable.getRecord()))
-                        .map(edge -> edge.vertices(direction.opposite()))
-                        .flatMap(vertices -> asStream(vertices)));
+            if (fieldValue instanceof ORidBag){
+                if(!graph.isLightWeightEdge()){
+                    streamVertices.add(asStream(((ORidBag) fieldValue).rawIterator())
+                            .map(oIdentifiable -> new OrientEdge(graph, oIdentifiable.getRecord()))
+                            .map(edge -> edge.vertices(direction.opposite()))
+                            .flatMap(vertices -> asStream(vertices)));
+                } else {
+                    streamVertices.add(asStream(((ORidBag) fieldValue).rawIterator())
+                            .map(oIdentifiable -> new OrientVertex(graph, oIdentifiable)));
+                }
+            }
             else
                 throw new IllegalStateException("Invalid content found in " + fieldName + " field: " + fieldValue);
         }

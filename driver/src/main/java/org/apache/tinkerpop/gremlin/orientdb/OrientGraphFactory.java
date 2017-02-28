@@ -17,6 +17,7 @@ public final class OrientGraphFactory {
     protected Configuration configuration;
     protected volatile OPartitionedReCreatableDatabasePool pool;
     protected boolean labelAsClassName;
+    protected boolean lightWeightEdge = false;
 
     public OrientGraphFactory(String url) {
         this(url, ADMIN, ADMIN);
@@ -70,6 +71,7 @@ public final class OrientGraphFactory {
         } else {
             g = new OrientGraph(getDatabase(create, open), config, user, password);
         }
+        g.setLightWeightEdge(this.lightWeightEdge);
         initGraph(g);
         return g;
     }
@@ -140,6 +142,11 @@ public final class OrientGraphFactory {
      */
     public OrientGraphFactory setLabelAsClassName(boolean is) {
         this.labelAsClassName = is;
+        return this;
+    }
+
+    public OrientGraphFactory setLightWeightEdge(boolean is) {
+        this.lightWeightEdge = is;
         return this;
     }
 

@@ -85,6 +85,7 @@ public final class OrientGraph implements Graph {
     protected final OPartitionedReCreatableDatabasePool pool;
     protected final String user;
     protected final String password;
+    protected boolean lightWeightEdge;
 
     public static OrientGraph open(final Configuration config) {
         OrientGraphFactory factory = new OrientGraphFactory(config);
@@ -121,6 +122,15 @@ public final class OrientGraph implements Graph {
         } else {
             this.features = ODBFeatures.OrientFeatures.INSTANCE_NOTX;
         }
+    }
+
+    public OrientGraph setLightWeightEdge(boolean is){
+        this.lightWeightEdge = is;
+        return this;
+    }
+
+    public boolean isLightWeightEdge(){
+        return this.lightWeightEdge;
     }
 
     public Features features() {
